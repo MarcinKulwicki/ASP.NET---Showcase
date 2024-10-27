@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Web_App___Showcase.Entities;
+using Web_App___Showcase.Services;
 
 namespace Web_App___Showcase
 {
@@ -24,11 +21,17 @@ namespace Web_App___Showcase
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<RestaurantDbContext>();
+            services.AddScoped<RestaurantSeeder>();
+            services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<IRestaurantService, RestaurantService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RestaurantSeeder seeder)
         {
+            seeder.Seed();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

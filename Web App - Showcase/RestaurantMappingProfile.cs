@@ -17,6 +17,8 @@ namespace Web_App___Showcase
 
             CreateMap<CreateRestaurantDto, Restaurant>()
                 .ForMember(r => r.Address, item => item.MapFrom(dto => new Address() { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
+
+            CreateMap<CreateDishDto, Dish>();
         }
     }
 }

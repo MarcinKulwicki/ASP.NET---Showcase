@@ -8,7 +8,7 @@ namespace Web_App___Showcase.Services
         int Create(CreateRestaurantDto dto);
         IEnumerable<RestaurantDto> GetAll();
         RestaurantDto GetById(int id);
-        bool Delete(int id);
-        bool Update(PutRestaurantDto putDto, int id);
+        void Delete(int id);
+        void Update(PutRestaurantDto putDto, int id);
     }
 }

@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Web_App___Showcase.Models;
 using Web_App___Showcase.Services;
 
 namespace Web_App___Showcase.Controllers
 {
     [Route("api/restaurant")]
+    [ApiController]
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
@@ -18,28 +21,22 @@ namespace Web_App___Showcase.Controllers
         [HttpPut("{id}")]
         public ActionResult<RestaurantDto> Update([FromBody] PutRestaurantDto dto, [FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            _restaurantService.Update(dto, id);
 
-            var isUpdated = _restaurantService.Update(dto, id);
-
-            return isUpdated ? Ok() : NotFound();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var isDeleted = _restaurantService.Delete(id);
+            _restaurantService.Delete(id);
 
-            return isDeleted ? NoContent() : NotFound();
+            return NoContent();
         }
 
         [HttpPost]
         public ActionResult CreateRestaurat([FromBody] CreateRestaurantDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             int id = _restaurantService.Create(dto);
 
             return Created($"/api/restaurant/{id}", null);
@@ -49,6 +46,7 @@ namespace Web_App___Showcase.Controllers
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
             var items = _restaurantService.GetAll();
+
             return Ok(items);
         }
 
@@ -56,9 +54,6 @@ namespace Web_App___Showcase.Controllers
         public ActionResult<RestaurantDto> Get([FromRoute] int id)
         {
             var item = _restaurantService.GetById(id);
-
-            if (item == null)
-                return NotFound();
 
             return Ok(item);
         }

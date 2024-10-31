@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Web_App___Showcase.Entities;
 
@@ -20,6 +22,12 @@ namespace Web_App___Showcase
         {
             if (_dbContext.Database.CanConnect())
             {
+                if (!_dbContext.Role.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.Role.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
                 if (!_dbContext.Restaurants.Any())
                 {
                     var restaurants = GetRestaurants();
@@ -27,6 +35,17 @@ namespace Web_App___Showcase
                     _dbContext.SaveChanges();
                 }
             }
+        }
+
+        private IEnumerable<Role> GetRoles()
+        {
+            return new List<Role>()
+            {
+                new() { Name = "User" },
+                new() { Name = "Manager" },
+                new() { Name = "Influencer" },
+                new() { Name = "Admin" }
+            };
         }
 
         private IEnumerable<Restaurant> GetRestaurants()

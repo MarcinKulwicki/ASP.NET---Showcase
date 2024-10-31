@@ -21,6 +21,11 @@ namespace Web_App___Showcase.Middleware
             {
                 await next.Invoke(context);
             }
+            catch (BadRequestException badRequest)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequest.Message);
+            }
             catch (NotFoundException notfoundException)
             {
                 context.Response.StatusCode = 404;
